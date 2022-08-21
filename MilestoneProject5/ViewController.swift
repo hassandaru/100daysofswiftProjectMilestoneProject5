@@ -13,11 +13,11 @@ class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBarButton()
         // Do any additional setup after loading the view.
         shoppingListItemName = ["check" ]
         shoppingListItemDetails = ["first Item Details"]
     }
-
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         shoppingListItemName.count
@@ -38,5 +38,44 @@ class ViewController: UITableViewController {
 
         }
     }
+    
+    func setupNavBarButton() {
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem))
+
+    }
+    
+    @objc func addItem() {
+        let ac = UIAlertController(title: "Enter shopping Item, then details", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [weak self, weak ac] _ in
+            
+            guard let titleItem = ac?.textFields?[0].text?.lowercased() else { return }
+            guard let detailsItem = ac?.textFields?[1].text?.lowercased() else { return }
+
+            
+            self?.submit(titleItem, detailsOfItem: detailsItem)
+        }
+
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
+    
+    func submit(_ title: String, detailsOfItem: String) {
+//        self.shoppingListItemName.append(title)
+//        self.shoppingListItemDetails.append(detailsOfItem)
+        
+        shoppingListItemName.insert(title, at: 0)
+        shoppingListItemDetails.insert(detailsOfItem, at: 0)
+        
+//
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
+
+        return
+    }
+    
 }
 
