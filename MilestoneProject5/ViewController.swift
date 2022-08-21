@@ -42,6 +42,7 @@ class ViewController: UITableViewController {
     func setupNavBarButton() {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
 
     }
     
@@ -75,6 +76,20 @@ class ViewController: UITableViewController {
         tableView.insertRows(at: [indexPath], with: .automatic)
 
         return
+    }
+    
+    @objc func shareTapped() {
+        
+        if shoppingListItemName.isEmpty {
+            print("No items found.")
+            return
+        }
+        let list = shoppingListItemName.joined(separator: "\n")
+        
+        let vc = UIActivityViewController(activityItems: [list], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem
+        
+        present(vc, animated: true)
     }
     
 }
